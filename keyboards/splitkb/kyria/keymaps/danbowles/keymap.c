@@ -46,6 +46,10 @@ enum layers {
 #define MAC_ENT_NAV  LT(_MAC_NAV, KC_ENT)
 #define ENT_NAV      LT(_NAV, KC_ENT)
 
+// Modifiers
+#define WIN_DL LCTL(LGUI(KC_LEFT))
+#define WIN_DR LCTL(LGUI(KC_RIGHT))
+
 // Not Used
 #define FKEYS    MO(_FUNCTION)
 
@@ -74,7 +78,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_MAC] = LAYOUT(
      _______ , KC_Q ,  KC_W   , KC_E    ,   KC_R ,   KC_T ,                                                  KC_Y,    KC_U   , KC_I   , KC_O  , KC_P   , KC_BSLS,
      _______ , KC_A ,  KC_S   , KC_D    ,   KC_F ,   KC_G ,                                                  KC_H,    KC_J   , KC_K   , KC_L  , KC_SCLN, KC_QUOT,
-     KC_LSFT , KC_Z ,  KC_X   , KC_C    ,   KC_V ,   KC_B , _______    , ADJUST  , WIN        , _______    , KC_N,    KC_M   , KC_COMM, KC_DOT, KC_SLSH, KC_RSFT,
+     KC_LSFT , KC_Z ,  KC_X   , KC_C    ,   KC_V ,   KC_B , LGUI(KC_X) , ADJUST  , WIN        , _______    , KC_N,    KC_M   , KC_COMM, KC_DOT, KC_SLSH, KC_RSFT,
                                 KC_LCTRL, KC_LALT, KC_LGUI, MAC_SPC_SYM, KC_LGUI , MAC_SPC_SYM, MAC_ENT_NAV, KC_BSPC, _______, _______
     ),
 
@@ -95,8 +99,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_WIN] = LAYOUT(
       _______, _______, _______, _______, _______, _______ ,                                     _______, _______, _______, _______, _______, _______,
       _______, _______, _______, _______, _______, _______ ,                                     _______, _______, _______, _______, _______, _______,
-      _______, _______, _______, _______, _______, _______ , _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-                                 _______, KC_LALT, KC_LCTRL, SPC_SYM, _______, SPC_SYM, ENT_NAV, _______, _______, _______
+      _______, _______, _______, _______, _______, _______ , LCTL(KC_X), _______, _______, _______, _______, _______, _______, _______, _______, _______,
+                                 _______, KC_LALT, KC_LCTRL, SPC_SYM    , _______, SPC_SYM, ENT_NAV, _______, _______, _______
     ),
 
 /*
@@ -178,7 +182,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_NAV] = LAYOUT(
       _______, KC_TAB , _______, _______, _______, _______ ,                                     _______, KC_HOME, KC_UP,   KC_END,  _______, KC_DEL,
       _______, KC_ESC , _______, _______, _______, _______ ,                                     _______, KC_LEFT, KC_DOWN, KC_RGHT, _______, _______,
-      _______, _______, _______, _______, _______, _______ , _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+      _______, _______, _______, _______, _______, _______ , _______, _______, _______, _______, _______, WIN_DL , WIN_DR , _______, _______, _______,
                                  _______, _______, KC_LCTRL, _______, _______, _______, _______, _______, _______, _______
     ),
 
