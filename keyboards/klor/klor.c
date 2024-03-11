@@ -94,7 +94,7 @@ const keypos_t PROGMEM hand_swap_config[MATRIX_ROWS][MATRIX_COLS] =
 //    X │ 09  02  01  00 │ X    X │ 21  22  23  30 │ X   3
 //      └────────────────┘        └────────────────┘
 
-
+/*
 // POLYDACTYL / YUBITSUME 
 // use this matrix if you use the polydactyl or yubitsume layout ────────────────────────────────────┐
 
@@ -179,12 +179,12 @@ led_config_t g_led_config = { {
 // ────────────────────────────────────────────────────────────────────────────────────────────────────┘
 */
 
-/*
+
 // SAEGEWERK
 // use this matrix if you use the saegewerk layout ────────────────────────────────────────────────────┐
 
 led_config_t g_led_config = { {
-//COL   00     01   02   03   04   05              ROW 
+// COL   00     01   02   03   04   05              ROW 
     { NO_LED,  17,  12,  11,   5,   4          },//00
     { NO_LED,  16,  13,  10,   6,   3          },//01
     { NO_LED,  15,  14,   9,   7,   2          },//02
@@ -220,7 +220,6 @@ led_config_t g_led_config = { {
 } };
 
 // ────────────────────────────────────────────────────────────────────────────────────────────────────┘
-*/
 
 void suspend_power_down_kb(void) {
     rgb_matrix_set_suspend_state(true);
