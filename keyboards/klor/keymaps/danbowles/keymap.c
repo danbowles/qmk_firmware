@@ -38,7 +38,7 @@ enum klor_layers {
     /* _M_XYZ = Mac Os, _W_XYZ = Win/Linux */
     _QWERTY,
     _NUM,
-    _COLEMAK,
+    // _COLEMAK,
     _LOWER,
     _RAISE,
     _ADJUST,
@@ -128,7 +128,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_Q,     KC_W,     KC_E,     KC_R,     KC_T,                          KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,
     G_A ,     A_S,      C_D,      S_F,      KC_G,                          KC_H,     S_J,      C_K,      A_L,      G_SC,
     KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,     KC_MUTE,   KC_MPLY,  KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,
-                        KC_ESC,   KC_TAB,   KC_SPC,                        KC_ENT,   KC_BSPC,  _______
+                        KC_ESC,   KC_TAB,   SPC_NUM,                       KC_ENT,   KC_BSPC,  MO(_ADJUST)
  ),
 
  /*
@@ -169,13 +169,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                  │  CTRL   │  LOWER  │  SPACE  │   ALT   ││ CMD/WIN │  ENTER  │  RAISE  │  BSPCE  │
                                  └─────────┴─────────┴─────────┴─────────┘└─────────┴─────────┴─────────┴─────────┘ */
 
-   [_COLEMAK] = LAYOUT_polydactyl(
+   // [_COLEMAK] = LAYOUT_polydactyl(
  //╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷
-              KC_Q,     KC_W,     KC_F,     KC_P,     KC_G,                          KC_J,     KC_L,     KC_U,     KC_Y,     KC_SCLN,
-    KC_TAB,   GUI_A,    ALT_R,    CTL_S,    SHT_T,    KC_D,                          KC_H,     SHT_N,    CTL_E,    ALT_I,    GUI_O,    KC_QUOT,
-    KC_Q,     KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,     KC_LSFT,   KC_MPLY,  KC_K,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,  KC_BSLS,
-                                  KC_DEL,   LOWER,    KC_SPC,   KC_ESC,   KC_LGUI,  KC_ENT,   RAISE,    KC_BSPC
- ),
+ //              KC_Q,     KC_W,     KC_F,     KC_P,     KC_G,                          KC_J,     KC_L,     KC_U,     KC_Y,     KC_SCLN,
+ //    KC_TAB,   GUI_A,    ALT_R,    CTL_S,    SHT_T,    KC_D,                          KC_H,     SHT_N,    CTL_E,    ALT_I,    GUI_O,    KC_QUOT,
+ //    KC_Q,     KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,     KC_LSFT,   KC_MPLY,  KC_K,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,  KC_BSLS,
+ //                                  KC_DEL,   LOWER,    KC_SPC,   KC_ESC,   KC_LGUI,  KC_ENT,   RAISE,    KC_BSPC
+ // ),
 
  /*
    ╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸
@@ -241,7 +241,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
    [_ADJUST] = LAYOUT_polydactyl(
  //╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷
-              AU_TOGG,   HF_TOGG,  RGB_HUI,  RGB_MOD,  XXXXXXX,                       XXXXXXX,  KC_F7,    KC_F8,    KC_F9,    KC_F14,
+              AU_TOGG,  HF_TOGG,  RGB_HUI,  RGB_MOD,  XXXXXXX,                       XXXXXXX,  KC_F7,    KC_F8,    KC_F9,    KC_F14,
     QK_BOOT,  DB_TOGG,  QWERTY,   RGB_SAI,  XXXXXXX,  XXXXXXX,                       XXXXXXX,  KC_F4,    KC_F5,    KC_F6,    KC_F12,   KC_F13,
     MAKE_H,   OS_SWAP,  COLEMAK,  RGB_VAI,  XXXXXXX,  XXXXXXX,  KC_MUTE,   KC_MPLY,  XXXXXXX,  KC_F1,    KC_F2,    KC_F3,    KC_F10,   KC_F11,
                                   _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______
@@ -525,20 +525,20 @@ int layerstate = 0;
 
 layer_state_t layer_state_set_kb(layer_state_t state) {
       switch (get_highest_layer(layer_state | default_layer_state)) {
-            case 0:
-                strcpy ( layer_state_str, "BASE COLEMAK");
+            case _QWERTY:
+                strcpy ( layer_state_str, "Q W E R T Y");
                 break;
-            case 1:
-                strcpy ( layer_state_str, "BASE QWERTY");
+            case _NUM:
+                strcpy ( layer_state_str, "N U M / S Y M");
+                break;
+            case _ADJUST:
+                strcpy ( layer_state_str, "A D J U S T");
                 break;
             case 2:
                 strcpy ( layer_state_str, "LOWER");
                 break;
             case 3:
                 strcpy ( layer_state_str, "RAISE");
-                break;
-            case 4:
-                strcpy ( layer_state_str, "ADJUST");
                 break;
             default:
                 strcpy ( layer_state_str, "XXXXXX");
@@ -664,14 +664,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 // │ l a y e r                                                 │
 // └───────────────────────────────────────────────────────────┘
 
-        case COLEMAK:
-            if (record->event.pressed) {
-                set_single_persistent_default_layer(_COLEMAK);
-                #ifdef HAPTIC_ENABLE
-                  DRV_pulse(transition_hum);
-                #endif // HAPTIC_ENABLE
-            }
-            return false;
+        // case COLEMAK:
+        //     if (record->event.pressed) {
+        //         set_single_persistent_default_layer(_COLEMAK);
+        //         #ifdef HAPTIC_ENABLE
+        //           DRV_pulse(transition_hum);
+        //         #endif // HAPTIC_ENABLE
+        //     }
+        //     return false;
         case QWERTY:
             if (record->event.pressed) {
                 set_single_persistent_default_layer(_QWERTY);
