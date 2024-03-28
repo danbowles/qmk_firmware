@@ -20,9 +20,9 @@
 #include <stdio.h>
 #include <string.h>
 #include "klor.h"
-#ifdef HAPTIC_ENABLE
-#include "drivers/haptic/DRV2605L.h"
-#endif //HAPTIC ENABLE
+// #ifdef HAPTIC_ENABLE
+// #include "drivers/haptic/DRV2605L.h"
+// #endif //HAPTIC ENABLE
 
 
 // ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -36,11 +36,9 @@
 
 enum klor_layers {
     /* _M_XYZ = Mac Os, _W_XYZ = Win/Linux */
-    _QWERTY,
-    _NUM,
-    // _COLEMAK,
-    _LOWER,
-    _RAISE,
+    _QWERTY = 0,
+    _SYM,
+    _NAV,
     _ADJUST,
 };
 
@@ -50,10 +48,6 @@ enum klor_layers {
 
 enum custom_keycodes {
     QWERTY = SAFE_RANGE,
-    COLEMAK,
-    LOWER,
-    RAISE,
-    ADJUST,
     OS_SWAP,
     MAKE_H,
 };
@@ -62,7 +56,11 @@ enum custom_keycodes {
 // │ d e f i n e   m a c r o n a m e s                         │
 // └───────────────────────────────────────────────────────────┘
 
-#define SPC_NUM LT(_NUM, KC_SPC)
+#define SPC_SYM LT(_SYM, KC_SPC)
+#define ENT_NAV LT(_NAV, KC_ENT)
+#define WD_L LGUI(LCTL(KC_LEFT))
+#define WD_R LGUI(LCTL(KC_RIGHT))
+#define MO_ADJ MO(_ADJUST)
 
 // LEFT HAND HOME ROW MODS ├───────────────────────────────────┐
 
@@ -128,14 +126,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_Q,     KC_W,     KC_E,     KC_R,     KC_T,                          KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,
     G_A ,     A_S,      C_D,      S_F,      KC_G,                          KC_H,     S_J,      C_K,      A_L,      G_SC,
     KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,     KC_MUTE,   KC_MPLY,  KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,
-                        KC_ESC,   KC_TAB,   SPC_NUM,                       KC_ENT,   KC_BSPC,  MO(_ADJUST)
+                        KC_ESC,   KC_TAB,   SPC_SYM,                       ENT_NAV,  KC_BSPC,  MO_ADJ
  ),
 
  /*
    ╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸
 
    ┌─────────────────────────────────────────────────┐
-   │ Num Layer s a e g e w e r k                     │
+   │ Sym Layer s a e g e w e r k                     │
    └─────────────────────────────────────────────────┘
    ┌─────────┬─────────┬─────────┬─────────┬─────────┐                    ┌─────────┬─────────┬─────────┬─────────┬─────────┐
    │     1   │     2   │     3   │    4    │     5   │ ╭╮╭╮╭╮╭╮╭╮╭╮╭╮╭╮╭╮ │     6   │    7    │    8    │     9   │    0    │
@@ -147,11 +145,35 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                        │         │         │         │                    │         │         │         │
                        └─────────┴─────────┴─────────┘                    └─────────┴─────────┴─────────┘ */
 
-   [_NUM] = LAYOUT_saegewerk(
+   [_SYM] = LAYOUT_saegewerk(
  //╷         ╷         ╷         ╷         ╷         ╷         ╷╷         ╷         ╷         ╷         ╷         ╷         ╷
     KC_1,     KC_2,     KC_3,     KC_4,     KC_5,                          KC_6,     KC_7,     KC_8,     KC_9,     KC_0,
     KC_GRV,   _______,  _______,  _______,  _______,                       KC_EQL,   KC_LBRC,  KC_RBRC,  KC_MINS,  KC_QUOT,
     _______,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  KC_BSLS,
+                        _______,  _______,  _______,                       _______,  _______,  _______
+ ),
+
+/*
+   ╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸
+
+   ┌─────────────────────────────────────────────────┐
+   │ Nav Layer s a e g e w e r k                     │
+   └─────────────────────────────────────────────────┘
+   ┌─────────┬─────────┬─────────┬─────────┬─────────┐                    ┌─────────┬─────────┬─────────┬─────────┬─────────┐
+   │         │         │         │         │         │ ╭╮╭╮╭╮╭╮╭╮╭╮╭╮╭╮╭╮ │         │   HOME  │     ↑   │   END   │         │
+   ├─────────┼─────────┼─────────┼─────────┼─────────┤ │╰╯╰╯╰╯╰╯╰╯╰╯╰╯╰╯│ ├─────────┼─────────┼─────────┼─────────┼─────────┤
+   │         │         │         │         │         ├─╯                ╰─┤         │    ←    │     ↓   │    →    │         │
+   ├─────────┼─────────┼─────────┼─────────┼─────────┤╭────────╮╭────────╮├─────────┼─────────┼─────────┼─────────┼─────────┤
+   │         │         │         │         │         ││        ││        ││         │   ←WD   │   WD→   │         │         │
+   └─────────┴─────────┼─────────┼─────────┼─────────┤╰────────╯╰────────╯├─────────┼─────────┼─────────┼─────────┴─────────┘
+                       │         │         │         │                    │         │         │         │
+                       └─────────┴─────────┴─────────┘                    └─────────┴─────────┴─────────┘ */
+
+   [_NAV] = LAYOUT_saegewerk(
+ //╷         ╷         ╷         ╷         ╷         ╷         ╷╷         ╷         ╷         ╷         ╷         ╷         ╷
+    _______,  _______,  _______,  _______,  _______,                       _______,  KC_HOME,  KC_UP,    KC_END,   _______,
+    _______,  _______,  _______,  _______,  _______,                       _______,  KC_LEFT,  KC_DOWN,  KC_RIGHT, _______,
+    _______,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  WD_L,     WD_R,     _______,  _______,
                         _______,  _______,  _______,                       _______,  _______,  _______
  ),
 
@@ -181,52 +203,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    ╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸
 
    ┌───────────────────────────────────────────────────────────┐
-   │ l o w e r                                                 │
-   └───────────────────────────────────────────────────────────┘
-             ┌─────────┬─────────┬─────────┬─────────┬─────────┐                    ┌─────────┬─────────┬─────────┬─────────┬─────────┐
-             │ CAPSLCK │ NUMLCK  │    ↑    │    =    │    {    │ ╭╮╭╮╭╮╭╮╭╮╭╮╭╮╭╮╭╮ │    }    │    7    │    8    │    9    │    +    │
-   ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤ │╰╯╰╯╰╯╰╯╰╯╰╯╰╯╰╯│ ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐
-   │   ESC   │  HOME   │    ←    │    ↓    │    →    │    [    ├─╯                ╰─┤    ]    │    4    │    5    │    6    │    -    │    '    │
-   ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤╭────────╮╭────────╮├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-   │         │   END   │   PG↑   │  SAVE   │   PG↓   │    (    ││  MUTE  ││PLY/PSE ││    )    │    1    │    2    │    3    │    *    │    ▼    │
-   └─────────┴─────────┴─────────┼─────────┼─────────┼─────────┼╰────────╯╰────────╯┼─────────┼─────────┼─────────┼─────────┴─────────┴─────────┘
-                                 │    ▼    │    ▼    │    ▼    │    ▼    ││    ▼    │    ▼    │ ADJUST  │    0    │
-                                 └─────────┴─────────┴─────────┴─────────┘└─────────┴─────────┴─────────┴─────────┘ */
-
-   [_LOWER] = LAYOUT_polydactyl(
- //╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷
-              KC_CAPS,  KC_NUM,   KC_UP,    KC_EQL,   KC_LCBR,                       KC_RCBR,  KC_P7,    KC_P8,    KC_P9,    KC_PPLS,
-    KC_ESC,   KC_HOME,  KC_LEFT,  KC_DOWN,  KC_RGHT,  KC_LBRC,                       KC_RBRC,  KC_P4,    KC_P5,    KC_P6,    KC_MINS,  KC_DQT,
-    XXXXXXX,  KC_END,   KC_PGUP,  C(KC_S),  KC_PGDN,  KC_LPRN,  KC_MUTE,   KC_MPLY,  KC_RPRN,  KC_P1,    KC_P2,    KC_P3,    KC_PAST,  _______,
-                                  _______,  _______,  _______,  _______,   _______,  _______,  _______,  KC_P0
- ),
- /*
-   ╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸
-
-   ┌───────────────────────────────────────────────────────────┐
-   │ r a i s e                                                 │
-   └───────────────────────────────────────────────────────────┘
-             ┌─────────┬─────────┬─────────┬─────────┬─────────┐                    ┌─────────┬─────────┬─────────┬─────────┬─────────┐
-             │    !    │    @    │    #    │    $    │    %    │ ╭╮╭╮╭╮╭╮╭╮╭╮╭╮╭╮╭╮ │    ^    │    &    │         │    °    │    /    │
-   ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤ │╰╯╰╯╰╯╰╯╰╯╰╯╰╯╰╯│ ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐
-   │         │         │         │         │         │         ├─╯                ╰─┤         │         │         │         │         │         │
-   ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤╭────────╮╭────────╮├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-   │         │         │         │         │         │         ││  MUTE  ││PLY/PSE ││         │         │         │         │         │         │
-   └─────────┴─────────┴─────────┼─────────┼─────────┼─────────┼╰────────╯╰────────╯┼─────────┼─────────┼─────────┼─────────┴─────────┴─────────┘
-                                 │         │ ADJUST  │    ▼    │    ▼    ││    ▼    │    ▼    │    ▼    │    ▼    │
-                                 └─────────┴─────────┴─────────┴─────────┘└─────────┴─────────┴─────────┴─────────┘ */
-
-   [_RAISE] = LAYOUT_polydactyl(
- //╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷
-              KC_EXLM,  KC_AT,    KC_HASH,  KC_DLR,   KC_PERC,                       KC_CIRC,  KC_AMPR,  RALT(KC_U),RALT(KC_3),KC_BSLS,
-    XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,                       XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,
-    XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  KC_MUTE,   KC_MPLY,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,
-                                  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______
- ),
- /*
-   ╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸
-
-   ┌───────────────────────────────────────────────────────────┐
    │ a d j u s t                                               │
    └───────────────────────────────────────────────────────────┘
              ┌─────────┬─────────┬─────────┬─────────┬─────────┐                    ┌─────────┬─────────┬─────────┬─────────┬─────────┐
@@ -239,85 +215,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                  │    ▼    │    ▼    │    ▼    │    ▼    ││    ▼    │    ▼    │    ▼    │    ▼    │
                                  └─────────┴─────────┴─────────┴─────────┘└─────────┴─────────┴─────────┴─────────┘ */
 
-   [_ADJUST] = LAYOUT_polydactyl(
+   [_ADJUST] = LAYOUT_saegewerk(
  //╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷
-              AU_TOGG,  HF_TOGG,  RGB_HUI,  RGB_MOD,  XXXXXXX,                       XXXXXXX,  KC_F7,    KC_F8,    KC_F9,    KC_F14,
-    QK_BOOT,  DB_TOGG,  QWERTY,   RGB_SAI,  XXXXXXX,  XXXXXXX,                       XXXXXXX,  KC_F4,    KC_F5,    KC_F6,    KC_F12,   KC_F13,
-    MAKE_H,   OS_SWAP,  COLEMAK,  RGB_VAI,  XXXXXXX,  XXXXXXX,  KC_MUTE,   KC_MPLY,  XXXXXXX,  KC_F1,    KC_F2,    KC_F3,    KC_F10,   KC_F11,
-                                  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______
+    AU_TOGG,  HF_TOGG,  RGB_HUI,  RGB_MOD,  XXXXXXX,                       XXXXXXX,  KC_F7,    KC_F8,    KC_F9,    KC_F14,
+    DB_TOGG,  QWERTY,   RGB_SAI,  XXXXXXX,  XXXXXXX,                       XXXXXXX,  KC_F4,    KC_F5,    KC_F6,    KC_F12,
+    OS_SWAP,  _______,  RGB_VAI,  XXXXXXX,  XXXXXXX,  KC_MUTE,   KC_MPLY,  XXXXXXX,  KC_F1,    KC_F2,    KC_F3,    KC_F10,
+                        _______,  _______,  _______,                       _______,  _______,  _______
  )
 
- /*
-   ╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸
-
-   ┌───────────────────────────────────────────────────────────┐
-   │ t e m p l a t e   p o l y d a c t y l                     │
-   └───────────────────────────────────────────────────────────┘
-             ┌─────────┬─────────┬─────────┬─────────┬─────────┐                    ┌─────────┬─────────┬─────────┬─────────┬─────────┐
-             │         │         │         │         │         │ ╭╮╭╮╭╮╭╮╭╮╭╮╭╮╭╮╭╮ │         │         │         │         │         │
-   ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤ │╰╯╰╯╰╯╰╯╰╯╰╯╰╯╰╯│ ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐
-   │         │         │         │         │         │         ├─╯                ╰─┤         │         │         │         │         │         │
-   ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤╭────────╮╭────────╮├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-   │         │         │         │         │         │         ││        ││        ││         │         │         │         │         │         │
-   └─────────┴─────────┴─────────┼─────────┼─────────┼─────────┼╰────────╯╰────────╯┼─────────┼─────────┼─────────┼─────────┴─────────┴─────────┘
-                                 │         │         │         │         ││         │         │         │         │
-                                 └─────────┴─────────┴─────────┴─────────┘└─────────┴─────────┴─────────┴─────────┘
-
-   [_TEMPLATE] = LAYOUT_polydactyl(
- //╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷
-              _______,  _______,  _______,  _______,  _______,                       _______,  _______,  _______,  _______,  _______,
-    _______,  _______,  _______,  _______,  _______,  _______,                       _______,  _______,  _______,  _______,  _______,  _______,
-    _______,  _______,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  _______,  _______,
-                                  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______
- )
-
-   ╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸
-
-   ┌───────────────────────────────────────────────────────────┐
-   │ t e m p l a t e   k o n r a d                             │
-   └───────────────────────────────────────────────────────────┘
-             ┌─────────┬─────────┬─────────┬─────────┬─────────┐                    ┌─────────┬─────────┬─────────┬─────────┬─────────┐
-             │         │         │         │         │         │ ╭╮╭╮╭╮╭╮╭╮╭╮╭╮╭╮╭╮ │         │         │         │         │         │
-   ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤ │╰╯╰╯╰╯╰╯╰╯╰╯╰╯╰╯│ ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐
-   │         │         │         │         │         │         ├─╯                ╰─┤         │         │         │         │         │         │
-   ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤╭────────╮╭────────╮├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-   │         │         │         │         │         │         ││        ││        ││         │         │         │         │         │         │
-   └─────────┴─────────┴─────────┼─────────┼─────────┼─────────┤╰────────╯╰────────╯├─────────┼─────────┼─────────┼─────────┴─────────┴─────────┘
-                                 │         │         │         │                    │         │         │         │
-                                 └─────────┴─────────┴─────────┘                    └─────────┴─────────┴─────────┘
-
-   [_TEMPLATE] = LAYOUT_konrad(
- //╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷
-              _______,  _______,  _______,  _______,  _______,                       _______,  _______,  _______,  _______,  _______,
-    _______,  _______,  _______,  _______,  _______,  _______,                       _______,  _______,  _______,  _______,  _______,  _______,
-    _______,  _______,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  _______,  _______,
-                                  _______,  _______,  _______,                       _______,  _______,  _______
- )
-
-   ╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸
-
-   ┌─────────────────────────────────────────────────┐
-   │ t e m p l a t e   y u b i t s u m e             │
-   └─────────────────────────────────────────────────┘
-   ┌─────────┬─────────┬─────────┬─────────┬─────────┐                    ┌─────────┬─────────┬─────────┬─────────┬─────────┐
-   │         │         │         │         │         │ ╭╮╭╮╭╮╭╮╭╮╭╮╭╮╭╮╭╮ │         │         │         │         │         │
-   ├─────────┼─────────┼─────────┼─────────┼─────────┤ │╰╯╰╯╰╯╰╯╰╯╰╯╰╯╰╯│ ├─────────┼─────────┼─────────┼─────────┼─────────┤
-   │         │         │         │         │         ├─╯                ╰─┤         │         │         │         │         │
-   ├─────────┼─────────┼─────────┼─────────┼─────────┤╭────────╮╭────────╮├─────────┼─────────┼─────────┼─────────┼─────────┤
-   │         │         │         │         │         ││        ││        ││         │         │         │         │         │
-   └─────────┴─────────┼─────────┼─────────┼─────────┼╰────────╯╰────────╯┼─────────┼─────────┼─────────┼─────────┴─────────┘
-                       │         │         │         │         ││         │         │         │         │
-                       └─────────┴─────────┴─────────┴─────────┘└─────────┴─────────┴─────────┴─────────┘
-
-   [_TEMPLATE] = LAYOUT_yubitsume(
- //╷         ╷         ╷         ╷         ╷         ╷         ╷╷         ╷         ╷         ╷         ╷         ╷         ╷
-    _______,  _______,  _______,  _______,  _______,                       _______,  _______,  _______,  _______,  _______,
-    _______,  _______,  _______,  _______,  _______,                       _______,  _______,  _______,  _______,  _______,
-    _______,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  _______,
-                        _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______
- )
-
-
+/*
    ╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸
 
    ┌─────────────────────────────────────────────────┐
@@ -350,12 +256,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // └────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 // ▝▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▘
 
-void keyboard_post_init_user(void) {
-  // Call the post init code.
-  #if HAPTIC_ENABLE
-    haptic_disable(); // disables per key haptic feedback by default
-  #endif //HAPTIC ENABLE
-}
+// void keyboard_post_init_user(void) {
+//   // Call the post init code.
+//   #if HAPTIC_ENABLE
+//     haptic_disable(); // disables per key haptic feedback by default
+//   #endif //HAPTIC ENABLE
+// }
 
 
 // ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -523,32 +429,29 @@ void render_os_lock_status(void) {
 
 int layerstate = 0;
 
-layer_state_t layer_state_set_kb(layer_state_t state) {
-      switch (get_highest_layer(layer_state | default_layer_state)) {
-            case _QWERTY:
-                strcpy ( layer_state_str, "Q W E R T Y");
-                break;
-            case _NUM:
-                strcpy ( layer_state_str, "N U M / S Y M");
-                break;
-            case _ADJUST:
-                strcpy ( layer_state_str, "A D J U S T");
-                break;
-            case 2:
-                strcpy ( layer_state_str, "LOWER");
-                break;
-            case 3:
-                strcpy ( layer_state_str, "RAISE");
-                break;
-            default:
-                strcpy ( layer_state_str, "XXXXXX");
-        }
-      if (dmacro_num < 1) {
-          strcpy ( o_text, layer_state_str );
-    }
-  //return state;
-    return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
-}
+// layer_state_t layer_state_set_kb(layer_state_t state) {
+//       switch (get_highest_layer(layer_state | default_layer_state)) {
+//             case _QWERTY:
+//                 strcpy ( layer_state_str, "Q W E R T Y");
+//                 break;
+//             case _NUM:
+//                 strcpy ( layer_state_str, "N U M / S Y M");
+//                 break;
+//             case :
+//                 strcpy ( layer_state_str, "N U M / S Y M");
+//                 break;
+//             case _ADJUST:
+//                 strcpy ( layer_state_str, "A D J U S T");
+//                 break;
+//             default:
+//                 strcpy ( layer_state_str, "XXXXXX");
+//         }
+//       if (dmacro_num < 1) {
+//           strcpy ( o_text, layer_state_str );
+//     }
+//   return state;
+//     // return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+// }
 
 
 // ┌───────────────────────────────────────────────────────────┐
@@ -568,7 +471,37 @@ bool oled_task_kb(void) {
             if(dmacro_num == 3){ oled_write_P(play_ico, false); }
         #endif //DYNAMIC_MACRO_ENABLE
 
-        oled_write_ln(o_text, false);
+        // oled_write_ln(o_text, false);
+        switch (get_highest_layer(layer_state|default_layer_state)) {
+            case _QWERTY:
+                oled_write_P(PSTR("QWERTY\n"), false);
+                break;
+            case _NAV:
+                oled_write_P(PSTR("Nav\n"), false);
+                break;
+            case _SYM:
+                oled_write_P(PSTR("Sym\n"), false);
+                break;
+            case _ADJUST:
+                oled_write_P(PSTR("Adjust\n"), false);
+                break;
+            default:
+                oled_write_P(PSTR("Undefined\n"), false);
+        }
+        // switch (get_highest_layer(layer_state | default_layer_state)) {
+        //     case _QWERTY:
+        //         strcpy ( layer_state_str, "Q W E R T Y");
+        //         break;
+        //     case _NUM:
+        //         strcpy ( layer_state_str, "N U M / S Y M");
+        //         break;
+        //     case _NAV:
+        //         strcpy ( layer_state_str, "N U M / S Y M");
+        //         break;
+        //     case _ADJUST:
+        //         strcpy ( layer_state_str, "A D J U S T");
+        //         break;
+        // }
         render_os_lock_status();
 
     } else {  // ─────────────────────────────────────────── SECONDARY SIDE
@@ -672,39 +605,39 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         //         #endif // HAPTIC_ENABLE
         //     }
         //     return false;
-        case QWERTY:
-            if (record->event.pressed) {
-                set_single_persistent_default_layer(_QWERTY);
-                #ifdef HAPTIC_ENABLE
-                  DRV_pulse(transition_hum);
-                #endif // HAPTIC_ENABLE
-            }
-            return false;
-        case LOWER:
-            if (record->event.pressed) {
-                layer_on(_LOWER);
-                update_tri_layer(_LOWER, _RAISE, _ADJUST);
-            } else {
-                layer_off(_LOWER);
-                update_tri_layer(_LOWER, _RAISE, _ADJUST);
-            }
-            return false;
-        case RAISE:
-            if (record->event.pressed) {
-                layer_on(_RAISE);
-                update_tri_layer(_LOWER, _RAISE, _ADJUST);
-            } else {
-                layer_off(_RAISE);
-                update_tri_layer(_LOWER, _RAISE, _ADJUST);
-            }
-            return false;
-        case ADJUST:
-            if (record->event.pressed) {
-                layer_on(_ADJUST);
-            } else {
-                layer_off(_ADJUST);
-            }
-            return false;
+        // case QWERTY:
+        //     if (record->event.pressed) {
+        //         set_single_persistent_default_layer(_QWERTY);
+        //         #ifdef HAPTIC_ENABLE
+        //           DRV_pulse(transition_hum);
+        //         #endif // HAPTIC_ENABLE
+        //     }
+        //     return false;
+        // case LOWER:
+        //     if (record->event.pressed) {
+        //         layer_on(_LOWER);
+        //         update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        //     } else {
+        //         layer_off(_LOWER);
+        //         update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        //     }
+        //     return false;
+        // case RAISE:
+        //     if (record->event.pressed) {
+        //         layer_on(_RAISE);
+        //         update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        //     } else {
+        //         layer_off(_RAISE);
+        //         update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        //     }
+        //     return false;
+        // case ADJUST:
+        //     if (record->event.pressed) {
+        //         layer_on(_ADJUST);
+        //     } else {
+        //         layer_off(_ADJUST);
+        //     }
+        //     return false;
 
 // ┌───────────────────────────────────────────────────────────┐
 // │ q m k                                                     │
@@ -748,35 +681,35 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 // │ e n c o d e r  L                                          │
 // └───────────────────────────────────────────────────────────┘
 
-bool encoder_update_user(uint8_t index, bool clockwise) {
-    if (index == 0) {
-        if (clockwise) {
-            tap_code(KC_VOLU);
-        } else {
-            tap_code(KC_VOLD);
-        }
+// bool encoder_update_user(uint8_t index, bool clockwise) {
+    // if (index == 0) {
+    //     if (clockwise) {
+    //         tap_code(KC_VOLU);
+    //     } else {
+    //         tap_code(KC_VOLD);
+    //     }
 
 // ┌───────────────────────────────────────────────────────────┐
 // │ e n c o d e r  R                                          │
 // └───────────────────────────────────────────────────────────┘
 
-    } else if (index == 1) {
-      if(IS_LAYER_ON(_LOWER)){
-          if (clockwise) {
-              tap_code(KC_MNXT);
-          } else {
-              tap_code(KC_MPRV);
-          }
-      }else {
-            if (clockwise) {
-              tap_code(KC_VOLU);
-          } else {
-              tap_code(KC_VOLD);
-          }
-      }
-    }
-    return true;
-}
+    // } else if (index == 1) {
+    //   if(IS_LAYER_ON(_LOWER)){
+    //       if (clockwise) {
+    //           tap_code(KC_MNXT);
+    //       } else {
+    //           tap_code(KC_MPRV);
+    //       }
+    //   }else {
+    //         if (clockwise) {
+    //           tap_code(KC_VOLU);
+    //       } else {
+    //           tap_code(KC_VOLD);
+    //       }
+    //   }
+    // }
+    // return true;
+// }
 
 #endif // ENCODER_ENABLE
 
