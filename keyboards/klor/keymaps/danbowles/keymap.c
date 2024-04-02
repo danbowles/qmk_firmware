@@ -171,8 +171,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
    [_NAV] = LAYOUT_saegewerk(
  //╷         ╷         ╷         ╷         ╷         ╷         ╷╷         ╷         ╷         ╷         ╷         ╷         ╷
-    _______,  _______,  _______,  _______,  _______,                       _______,  KC_HOME,  KC_UP,    KC_END,   _______,
-    _______,  _______,  _______,  _______,  _______,                       _______,  KC_LEFT,  KC_DOWN,  KC_RIGHT, _______,
+    _______,  _______,  _______,  _______,  _______,                       _______,  KC_HOME,  _______,  KC_END,   _______,
+    _______,  _______,  _______,  _______,  _______,                       KC_LEFT,  KC_DOWN,  KC_UP,    KC_RIGHT, _______,
     _______,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  WD_L,     WD_R,     _______,  _______,
                         _______,  _______,  _______,                       _______,  _______,  _______
  ),
@@ -262,7 +262,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //     haptic_disable(); // disables per key haptic feedback by default
 //   #endif //HAPTIC ENABLE
 // }
-
 
 // ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
 // │ O L E D                                                                                                                                    │
@@ -676,6 +675,25 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 // ▝▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▘
 
 #ifdef ENCODER_ENABLE
+bool encoder_update_user(uint8_t index, bool clockwise) {
+    if (index == 0) { /* First encoder */
+        if (clockwise) {
+            // tap_code_delay(KC_VOLU, 10);
+            // tap_code(KC_PGDN);
+        } else {
+           // tap_code_delay(KC_VOLD, 10);
+            // tap_code(KC_PGUP);
+        }
+    } else if (index == 1) { /* Second encoder */
+        if (clockwise) {
+            rgb_matrix_increase_hue();
+        } else {
+            rgb_matrix_decrease_hue();
+        }
+    }
+    return false;
+}
+#endif
 
 // ┌───────────────────────────────────────────────────────────┐
 // │ e n c o d e r  L                                          │
@@ -710,10 +728,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // }
     // return true;
 // }
-
-#endif // ENCODER_ENABLE
-
-
 
 
 /*
