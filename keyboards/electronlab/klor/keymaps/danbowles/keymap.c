@@ -287,23 +287,23 @@ int dmacro_num = 0;
 
 
     // DYNMACRO RECORD ├─────────────────────────────────────────────────────────────┐
-    void dynamic_macro_record_start_user(void) {
+    bool dynamic_macro_record_start_user(int8_t direction) {
           dmacro_num = 1;
-        return;
+        return false;
     }
 
     // DYNMACRO STOP RECORDING ├─────────────────────────────────────────────────────┐
-    void dynamic_macro_record_end_user(int8_t direction) {
+    bool dynamic_macro_record_end_user(int8_t direction) {
           dmacro_num = 2;
           dmacro_timer = timer_read();
-        return;
+        return false;
     }
 
     // DYNMACRO PLAY RECORDING ├─────────────────────────────────────────────────────┐
-    void dynamic_macro_play_user(int8_t direction) {
+    bool dynamic_macro_play_user(int8_t direction) {
           dmacro_num = 3;
           dmacro_timer = timer_read();
-        return;
+        return false;
     }
 #endif //DYNAMIC_MACRO_ENABLE
 
@@ -583,10 +583,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     PLAY_SONG(winxp_song);
                   #endif // AUDIO_ENABLE
                 }
-              #ifdef HAPTIC_ENABLE
-                DRV_pulse(pulsing_strong);
-              #endif // HAPTIC_ENABLE
-            eeconfig_update_keymap(keymap_config.raw);
+//              #ifdef HAPTIC_ENABLE
+//                drv2605l_pulse(52);
+//              #endif // HAPTIC_ENABLE
+            eeconfig_update_keymap(&keymap_config);
             clear_keyboard();  // ──── clear to prevent stuck keys
             return false;
           }
@@ -659,9 +659,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
       case KC_MPLY:
         if (record->event.pressed) {
-          #ifdef HAPTIC_ENABLE
-                  DRV_pulse(sharp_click);
-          #endif // HAPTIC_ENABL
+//          #ifdef HAPTIC_ENABLE
+//                  drv2605l_pulse(4);
+//          #endif // HAPTIC_ENABLE
         }
         break;
     }
@@ -674,26 +674,26 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 // └────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 // ▝▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▘
 
-#ifdef ENCODER_ENABLE
-bool encoder_update_user(uint8_t index, bool clockwise) {
-    if (index == 0) { /* First encoder */
-        if (clockwise) {
-            // tap_code_delay(KC_VOLU, 10);
-            // tap_code(KC_PGDN);
-        } else {
-           // tap_code_delay(KC_VOLD, 10);
-            // tap_code(KC_PGUP);
-        }
-    } else if (index == 1) { /* Second encoder */
-        if (clockwise) {
-            rgb_matrix_increase_hue();
-        } else {
-            rgb_matrix_decrease_hue();
-        }
-    }
-    return false;
-}
-#endif
+// #ifdef ENCODER_ENABLE
+// bool encoder_update_user(uint8_t index, bool clockwise) {
+//     if (index == 0) { /* First encoder */
+//         if (clockwise) {
+//             // tap_code_delay(KC_VOLU, 10);
+//             // tap_code(KC_PGDN);
+//         } else {
+//            // tap_code_delay(KC_VOLD, 10);
+//             // tap_code(KC_PGUP);
+//         }
+//     } else if (index == 1) { /* Second encoder */
+//         if (clockwise) {
+//             rgb_matrix_increase_hue();
+//         } else {
+//             rgb_matrix_decrease_hue();
+//         }
+//     }
+//     return false;
+// }
+// #endif
 
 // ┌───────────────────────────────────────────────────────────┐
 // │ e n c o d e r  L                                          │
@@ -728,6 +728,40 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
     // }
     // return true;
 // }
+#if defined(ENCODER_MAP_ENABLE)
+const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
+    [0] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU),           ENCODER_CCW_CW(KC_LEFT, KC_RIGHT) },
+    [1] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU),           ENCODER_CCW_CW(KC_MPRV, KC_MNXT) },
+    [2] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU),           ENCODER_CCW_CW(KC_MPRV, KC_MNXT) },
+    [3] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU),           ENCODER_CCW_CW(KC_MPRV, KC_MNXT) },
+};
+#endif
+
+#ifdef COMBO_ENABLE
+
+enum combos {
+  QW_ESC,
+  WE_CLOSETAB,
+  ER_LASTTAB,
+  RT_PRTSCR,
+  WR_TERMINAL,
+};
+
+const uint16_t PROGMEM qw_combo[] = {KC_Q, KC_W, COMBO_END};
+const uint16_t PROGMEM we_combo[] = {KC_W, KC_E, COMBO_END};
+const uint16_t PROGMEM er_combo[] = {KC_E, KC_R, COMBO_END};
+const uint16_t PROGMEM rt_combo[] = {KC_R, KC_T, COMBO_END};
+const uint16_t PROGMEM wr_combo[] = {KC_W, KC_R, COMBO_END};
+
+combo_t key_combos[] = {
+  [QW_ESC] = COMBO(qw_combo, KC_ESC),
+  [WE_CLOSETAB] = COMBO(we_combo, LCTL(KC_F4)),
+  [ER_LASTTAB] = COMBO(er_combo, LCTL(LSFT(KC_T))),
+  [RT_PRTSCR] = COMBO(rt_combo, KC_PSCR),
+  [WR_TERMINAL] = COMBO(wr_combo, LCTL(LALT(KC_T))),
+};
+
+#endif // COMBO_ENABLE
 
 
 /*

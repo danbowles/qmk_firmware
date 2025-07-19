@@ -5,10 +5,10 @@ see https://docs.qmk.fm/#/feature_split_keyboard?id=setting-handedness
 for more options.
 */
 
+// #define EE_HANDS
 #define MASTER_LEFT
 // #define MASTER_RIGHT
 
-// #define TAPPING_TERM 170
 #define TAPPING_TERM 170
 
 // Enable rapid switch from tap to hold, disables double tap hold auto-repeat.
@@ -29,7 +29,6 @@ for more options.
 
 // RGB matrix support
 #ifdef RGB_MATRIX_ENABLE
-#    define RGB_MATRIX_STARTUP_MODE RGB_MATRIX_SOLID_COLOR
 // RGB Matrix Animation modes. Explicitly enabled
 // For full list of effects, see:
 // https://docs.qmk.fm//#/feature_rgb_matrix?id=rgb-matrix-effect
