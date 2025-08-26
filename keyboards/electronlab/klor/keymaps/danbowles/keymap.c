@@ -64,10 +64,10 @@ enum custom_keycodes {
 
 // LEFT HAND HOME ROW MODS ├───────────────────────────────────┐
 
-#define GUI_A MT(MOD_LGUI, KC_A)
-#define ALT_R MT(MOD_LALT, KC_R)
-#define CTL_S MT(MOD_LCTL, KC_S)
-#define SHT_T MT(MOD_LSFT, KC_T)
+// #define GUI_A MT(MOD_LGUI, KC_A)
+// #define ALT_R MT(MOD_LALT, KC_R)
+// #define CTL_S MT(MOD_LCTL, KC_S)
+// #define SHT_T MT(MOD_LSFT, KC_T)
 
 #define G_A MT(MOD_LGUI, KC_A)
 #define A_S MT(MOD_LALT, KC_S)
@@ -76,10 +76,10 @@ enum custom_keycodes {
 
 // RIGHT HAND HOME ROW MODS ├───────────────────────────────────┐
 
-#define SHT_N MT(MOD_RSFT, KC_N)
-#define CTL_E MT(MOD_LCTL, KC_E)
-#define ALT_I MT(MOD_LALT, KC_I)
-#define GUI_O MT(MOD_LGUI, KC_O)
+// #define SHT_N MT(MOD_RSFT, KC_N)
+// #define CTL_E MT(MOD_LCTL, KC_E)
+// #define ALT_I MT(MOD_LALT, KC_I)
+// #define GUI_O MT(MOD_LGUI, KC_O)
 
 #define S_J   MT(MOD_RSFT, KC_J)
 #define C_K   MT(MOD_LCTL, KC_K)
@@ -90,13 +90,13 @@ enum custom_keycodes {
 // │ d e f i n e   s o u n d s                                 │
 // └───────────────────────────────────────────────────────────┘
 
-#ifdef AUDIO_ENABLE
-  #define WINXP_SOUND W__NOTE(_DS6), Q__NOTE(_DS5), H__NOTE(_AS5), H__NOTE(_GS5), H__NOTE(_DS5), H__NOTE(_DS6), H__NOTE(_AS5)
-  #define MAC_SOUND S__NOTE(_CS5), B__NOTE(_C5)
+// #ifdef AUDIO_ENABLE
+//   #define WINXP_SOUND W__NOTE(_DS6), Q__NOTE(_DS5), H__NOTE(_AS5), H__NOTE(_GS5), H__NOTE(_DS5), H__NOTE(_DS6), H__NOTE(_AS5)
+//   #define MAC_SOUND S__NOTE(_CS5), B__NOTE(_C5)
 
-  float winxp_song[][2] = SONG(WINXP_SOUND);
-  float mac_song[][2] = SONG(MAC_SOUND);
-#endif // AUDIO_ENABLE
+//   float winxp_song[][2] = SONG(WINXP_SOUND);
+//   float mac_song[][2] = SONG(MAC_SOUND);
+// #endif // AUDIO_ENABLE
 
 // ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
 // │ K E Y M A P S                                                                                                                              │
@@ -549,16 +549,16 @@ bool oled_task_kb(void) {
 
 
 
-uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-        case SHT_T:
-            return TAPPING_TERM - 150;
-        case SHT_N:
-            return TAPPING_TERM - 150;
-        default:
-            return TAPPING_TERM;
-    }
-}
+// uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+//     switch (keycode) {
+//         case S_F:
+//             return TAPPING_TERM - 150;
+//         case S_J:
+//             return TAPPING_TERM - 150;
+//         default:
+//             return TAPPING_TERM;
+//     }
+// }
 
 
 // ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐

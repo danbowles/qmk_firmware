@@ -5,6 +5,9 @@ see https://docs.qmk.fm/#/feature_split_keyboard?id=setting-handedness
 for more options.
 */
 
+// #define ENCODER_RESOLUTION { 4 }
+// #define ENCODER_RESOLUTIONS_RIGHT { 4 }
+
 // #define EE_HANDS
 #define MASTER_LEFT
 // #define MASTER_RIGHT
