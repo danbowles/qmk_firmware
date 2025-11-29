@@ -40,6 +40,8 @@ enum klor_layers {
     _SYM,
     _NAV,
     _ADJUST,
+    _SCROLL,
+    _MOUSE,
 };
 
 // ┌───────────────────────────────────────────────────────────┐
@@ -62,6 +64,8 @@ enum custom_keycodes {
 #define WD_R LGUI(LCTL(KC_RIGHT))
 #define MO_ADJ MO(_ADJUST)
 
+#define TAB_MSE LT(_MOUSE, KC_TAB)
+
 // LEFT HAND HOME ROW MODS ├───────────────────────────────────┐
 
 // #define GUI_A MT(MOD_LGUI, KC_A)
@@ -74,6 +78,8 @@ enum custom_keycodes {
 #define C_D MT(MOD_LCTL, KC_D)
 #define S_F MT(MOD_LSFT, KC_F)
 
+#define ESC_SCR LT(_SCROLL, KC_ESC)
+
 // RIGHT HAND HOME ROW MODS ├───────────────────────────────────┐
 
 // #define SHT_N MT(MOD_RSFT, KC_N)
@@ -85,6 +91,9 @@ enum custom_keycodes {
 #define C_K   MT(MOD_LCTL, KC_K)
 #define A_L   MT(MOD_LALT, KC_L)
 #define G_SC  MT(MOD_LGUI, KC_SEMICOLON)
+
+static bool scroll_layer_active = false;
+static bool numlock_was_on      = false;
 
 // ┌───────────────────────────────────────────────────────────┐
 // │ d e f i n e   s o u n d s                                 │
@@ -126,7 +135,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_Q,     KC_W,     KC_E,     KC_R,     KC_T,                          KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,
     G_A ,     A_S,      C_D,      S_F,      KC_G,                          KC_H,     S_J,      C_K,      A_L,      G_SC,
     KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,     KC_MUTE,   KC_MPLY,  KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,
-                        KC_ESC,   KC_TAB,   SPC_SYM,                       ENT_NAV,  KC_BSPC,  MO_ADJ
+                        ESC_SCR,  TAB_MSE,  SPC_SYM,                       ENT_NAV,  KC_BSPC,  MO_ADJ
  ),
 
  /*
@@ -221,8 +230,54 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     DB_TOGG,  QWERTY,   RGB_SAI,  XXXXXXX,  XXXXXXX,                       XXXXXXX,  KC_F4,    KC_F5,    KC_F6,    KC_F12,
     OS_SWAP,  _______,  RGB_VAI,  XXXXXXX,  XXXXXXX,  KC_MUTE,   KC_MPLY,  XXXXXXX,  KC_F1,    KC_F2,    KC_F3,    KC_F10,
                         _______,  _______,  _______,                       _______,  _______,  _______
- )
+ ),
 
+/*
+   ╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸
+
+   ┌─────────────────────────────────────────────────┐
+   │ t e m p l a t e   s a e g e w e r k             │
+   └─────────────────────────────────────────────────┘
+   ┌─────────┬─────────┬─────────┬─────────┬─────────┐                    ┌─────────┬─────────┬─────────┬─────────┬─────────┐
+   │         │         │         │         │         │ ╭╮╭╮╭╮╭╮╭╮╭╮╭╮╭╮╭╮ │         │         │         │         │         │
+   ├─────────┼─────────┼─────────┼─────────┼─────────┤ │╰╯╰╯╰╯╰╯╰╯╰╯╰╯╰╯│ ├─────────┼─────────┼─────────┼─────────┼─────────┤
+   │         │         │         │         │         ├─╯                ╰─┤         │         │         │         │         │
+   ├─────────┼─────────┼─────────┼─────────┼─────────┤╭────────╮╭────────╮├─────────┼─────────┼─────────┼─────────┼─────────┤
+   │         │         │         │         │         ││        ││        ││         │         │         │         │         │
+   └─────────┴─────────┼─────────┼─────────┼─────────┤╰────────╯╰────────╯├─────────┼─────────┼─────────┼─────────┴─────────┘
+                       │         │         │         │                    │         │         │         │
+                       └─────────┴─────────┴─────────┘                    └─────────┴─────────┴─────────┘*/
+
+   [_SCROLL] = LAYOUT_saegewerk(
+ //╷         ╷         ╷         ╷         ╷         ╷         ╷╷         ╷         ╷         ╷         ╷         ╷         ╷
+    _______,  _______,  _______,  _______,  _______,                       _______,  _______,  _______,  _______,  _______,
+    _______,  _______,  _______,  _______,  _______,                       _______,  KC_BTN1,  KC_BTN3,  KC_BTN2,  _______,
+    _______,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  _______,
+                        _______,  _______,  _______,                       _______,  _______,  _______
+ ),
+/*
+   ╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸
+
+   ┌─────────────────────────────────────────────────┐
+   │ t e m p l a t e   s a e g e w e r k             │
+   └─────────────────────────────────────────────────┘
+   ┌─────────┬─────────┬─────────┬─────────┬─────────┐                    ┌─────────┬─────────┬─────────┬─────────┬─────────┐
+   │         │         │         │         │         │ ╭╮╭╮╭╮╭╮╭╮╭╮╭╮╭╮╭╮ │         │         │         │         │         │
+   ├─────────┼─────────┼─────────┼─────────┼─────────┤ │╰╯╰╯╰╯╰╯╰╯╰╯╰╯╰╯│ ├─────────┼─────────┼─────────┼─────────┼─────────┤
+   │         │         │         │         │         ├─╯                ╰─┤         │         │         │         │         │
+   ├─────────┼─────────┼─────────┼─────────┼─────────┤╭────────╮╭────────╮├─────────┼─────────┼─────────┼─────────┼─────────┤
+   │         │         │         │         │         ││        ││        ││         │         │         │         │         │
+   └─────────┴─────────┼─────────┼─────────┼─────────┤╰────────╯╰────────╯├─────────┼─────────┼─────────┼─────────┴─────────┘
+                       │         │         │         │                    │         │         │         │
+                       └─────────┴─────────┴─────────┘                    └─────────┴─────────┴─────────┘*/
+
+   [_MOUSE] = LAYOUT_saegewerk(
+ //╷         ╷         ╷         ╷         ╷         ╷         ╷╷         ╷         ╷         ╷         ╷         ╷         ╷
+    _______,  _______,  _______,  _______,  _______,                       _______,  _______,  _______,  _______,  _______,
+    _______,  _______,  _______,  _______,  _______,                       _______,  KC_BTN1,  KC_BTN3,  KC_BTN2,  _______,
+    _______,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  _______,
+                        _______,  _______,  _______,                       _______,  _______,  _______
+ ),
 /*
    ╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸
 
@@ -328,6 +383,26 @@ void matrix_scan_user(void) {
    #endif //DYNAMIC_MACRO_ENABLE
 }
 
+layer_state_t layer_state_set_user(layer_state_t state) {
+  bool now_scroll_active = layer_state_cmp(state, _SCROLL);
+
+  if (now_scroll_active && !scroll_layer_active) {
+    led_t leds = host_keyboard_led_state();
+    numlock_was_on = leds.num_lock;
+
+    if (!numlock_was_on) {
+      tap_code(KC_NUM_LOCK);
+    }
+
+    scroll_layer_active = true;
+  } else if (!now_scroll_active && scroll_layer_active) {
+    if (!numlock_was_on) {
+      tap_code(KC_NUM_LOCK);
+    }
+    scroll_layer_active = false;
+  }
+  return state;
+}
 
 // ┌───────────────────────────────────────────────────────────┐
 // │ o l e d   g r a p h i c s                                 │
@@ -473,7 +548,7 @@ bool oled_task_kb(void) {
         // oled_write_ln(o_text, false);
         switch (get_highest_layer(layer_state|default_layer_state)) {
             case _QWERTY:
-                oled_write_P(PSTR("QWERTY\n"), false);
+                oled_write_P(PSTR("Qwerty\n"), false);
                 break;
             case _NAV:
                 oled_write_P(PSTR("Nav\n"), false);
@@ -483,6 +558,12 @@ bool oled_task_kb(void) {
                 break;
             case _ADJUST:
                 oled_write_P(PSTR("Adjust\n"), false);
+                break;
+            case _SCROLL:
+                oled_write_P(PSTR("Scroll\n"), false);
+                break;
+            case _MOUSE:
+                oled_write_P(PSTR("Mouse\n"), false);
                 break;
             default:
                 oled_write_P(PSTR("Undefined\n"), false);
@@ -734,6 +815,8 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
     [1] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU),           ENCODER_CCW_CW(KC_MPRV, KC_MNXT) },
     [2] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU),           ENCODER_CCW_CW(KC_MPRV, KC_MNXT) },
     [3] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU),           ENCODER_CCW_CW(KC_MPRV, KC_MNXT) },
+    [4] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU),           ENCODER_CCW_CW(KC_MPRV, KC_MNXT) },
+    [5] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU),           ENCODER_CCW_CW(KC_MPRV, KC_MNXT) },
 };
 #endif
 
