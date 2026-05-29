@@ -1,10 +1,9 @@
 # klorball35
 
-A 35-key split keyboard scaffold for QMK.
+A 35-key, diodeless split keyboard with a trackball!
 
-* Keyboard Maintainer: [Dan Bowles](https://github.com/dan.be)
-* Hardware Supported: klorball35 PCBs with Elite-C or Pro-Micro-compatible controllers
-* Hardware Availability: TBD
+* Keyboard Maintainer: [Dan Bowles](https://github.com/danbowles)
+* Hardware Supported: [Helios OxCB](https://github.com/0xCB-dev/0xCB-Helios?tab=readme-ov-file)
 
 The matrix pins are an initial scaffold and should be checked against the PCB before flashing.
 
@@ -18,10 +17,8 @@ Flashing example for this keyboard:
 
 See the [build environment setup](https://docs.qmk.fm/#/getting_started_build_tools) and the [make instructions](https://docs.qmk.fm/#/getting_started_make_guide) for more information.
 
+A build guide for this keyboard has not yet been written.
+
 ## Bootloader
 
-Enter the bootloader in 3 ways:
-
-* **Bootmagic reset**: Hold down the key at (0,0) in the matrix and plug in the keyboard
-* **Physical reset button**: Briefly press the reset button on the controller
-* **Keycode in layout**: Press the key mapped to `QK_BOOT`
+Helios comes equipped with a bootloader that can be accessed via the reset button or a keycode in the layout.
